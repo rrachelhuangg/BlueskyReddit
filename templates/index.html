@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Bluesky Reddit</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div id = "card">
+        <div id = "top-rectangle">
+            <div id = "name"><img src = "../static/images/bluesky_logo.png" id = "bluesky-logo"/>Bluesky Custom Feed Generator</div>
+        </div>
+        <div id = "bottom-rectangle">
+            {% for post in posts %}
+              <div class = "skeet-card">
+                <div class = "username">
+                  rachel <span class="handle"><a href = "https://bsky.app/" target = "_blank">@{{post.handle}}</a></span><span class = "handle"> • 7h</span>
+                </div>
+                <div class = "content">
+                  {{post.text_content}}
+                </div>
+                <div class = "status">
+                  <span class="status-chunk"><img src="../static/images/comment_icon.png" class="status-icon"/><span>{{post.reply_count}}</span></span><span class="filler"></span>
+                  <span class="status-chunk"><img src="../static/images/repost_icon.png" class="status-icon"/><span>{{post.repost_count}}</span></span><span class="filler"></span>
+                  <span class="status-chunk"><img src="../static/images/like_icon.png" class="status-icon"/><span>{{post.like_count}}</span></span><span class="filler"></span>
+                  <span class="status-chunk"><img src="../static/images/hamburger_icon.png" class="status-icon"/></span>
+                </div>
+              </div>
+            {% endfor %}
+        </div>
+    </div> 
+    </main>
+    <script src="index.js"></script>
+  </body>
+</html>

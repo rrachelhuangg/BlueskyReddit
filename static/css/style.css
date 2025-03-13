@@ -1,0 +1,96 @@
+html, body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  min-height:100vh;
+  background-color: #f1f1f1;
+  font-family:Arial, Helvetica, sans-serif;
+  color: rgb(0, 0, 0);
+  overflow:auto;
+}
+
+#card{
+    background-color: #ffffff;
+    width:40vw;
+    display:flex;
+    flex-direction: column;
+    border: 1px solid rgb(186, 186, 186);
+}
+
+#top-rectangle{
+  border-bottom: 1px solid rgb(186, 186, 186);
+  width:100%;
+  padding:2% 3% 2% 3%;
+  box-sizing: border-box;
+  font-weight:bold;
+  font-size:110%;
+}
+
+#bottom-rectangle{
+  width:100%;
+  height:45vw;
+  padding:2% 3% 3% 3%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap:15px;
+  overflow-y: auto;
+}
+
+#bluesky-logo{
+    width:5%;
+    margin-right:2%;
+}
+
+.skeet-card{
+    border:1px solid rgb(186, 186, 186);
+    width:37vw;
+    padding: 2% 1% 2% 1%;
+    display: flex;
+    flex-direction: column;
+}
+
+.username{
+    font-size:95%;
+    font-weight:bold;
+    padding-left:10%;
+}
+
+.handle{
+    font-weight:lighter;
+    color:rgb(130, 130, 130);
+    padding-left: 3%;
+}
+
+a{
+    text-decoration: none;
+    color:rgb(130, 130, 130);
+}
+
+.content{
+    margin-top:0.75%;
+    padding-left:10%;
+}
+
+.status{
+    margin-top: 0.75%;
+    padding-left:9.5%;
+    color:rgb(130, 130, 130);
+}
+
+.status-icon{
+    width:4%;
+    display:inline;
+    vertical-align: middle;
+}
+
+.filler{
+    margin-right:17.5%;
+}
+
+.status-chunk:hover{
+    background-color: rgb(240, 240, 240);
+    cursor:pointer;
+    border-radius:20%;
+}
