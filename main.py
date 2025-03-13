@@ -7,9 +7,9 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    refresh_token = get_refresh_token('demo-bsky-reddit.bsky.social', 'Bluesky#1!')
+    refresh_token = get_refresh_token('demo-bluesky-acc.bsky.social', 'Bluesky#1!')
     access_token = get_access_token(refresh_token)
-    handle = "demo-bsky-reddit.bsky.social"
+    handle = "demo-bluesky-acc.bsky.social"
     url = f'https://bsky.social/xrpc/app.bsky.feed.getAuthorFeed?actor={handle}&limit={100}'
     headers = {
         'Authorization':f"Bearer {access_token}",
@@ -18,13 +18,13 @@ def home():
     response = requests.get(url, headers=headers, timeout=15)
 
     posts = []
-    for i in range(10):
+    for i in range(len(response.json()['feed'])):
         post = {}
-        post['handle'] = response.json()['feed'][0]['post']['author']['handle']
-        post['text_content'] = response.json()['feed'][0]['post']['record']['text']
-        post['reply_count'] = response.json()['feed'][0]['post']['replyCount']
-        post['repost_count'] = response.json()['feed'][0]['post']['repostCount']
-        post['like_count'] = response.json()['feed'][0]['post']['likeCount']
+        post['handle'] = response.json()['feed'][i]['post']['author']['handle']
+        post['text_content'] = response.json()['feed'][i]['post']['record']['text']
+        post['reply_count'] = response.json()['feed'][i]['post']['replyCount']
+        post['repost_count'] = response.json()['feed'][i]['post']['repostCount']
+        post['like_count'] = response.json()['feed'][i]['post']['likeCount']
         posts += [post]
     return render_template("index.html", posts=posts)
 

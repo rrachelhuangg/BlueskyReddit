@@ -31,9 +31,20 @@
                 </div>
               </div>
             {% endfor %}
+
+            <div class="modal-overlay" id="login-modal">
+              <div class="modal-content">
+                <button class="modal-close" id = "close-modal-button">x</button>
+                  <div class="modal-title">Bluesky Custom Feed Generator</div>
+                  <p>Bluesky is a decentalized and open-source alternative to X. The purpose of this web app is to demonstrate one of 
+                    Bluesky's core features: creating your own feed. </p>
+                  <button class="button" id = "submit-button">Continue</button>
+              </div>
+            </div>
+            
         </div>
     </div> 
     </main>
-    <script src="index.js"></script>
+    <script src="../static/js/index.js"></script>
   </body>
 </html>
