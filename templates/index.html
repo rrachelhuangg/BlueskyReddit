@@ -6,33 +6,28 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Bluesky Reddit</title>
     <link rel="stylesheet" href="../static/css/style.css">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../static/bluesky_logo.png" type="image/x-icon">
   </head>
   <body>
     <main>
-      <div id = "card">
-        <div id = "top-rectangle">
-            <div id = "name"><img src = "../static/images/bluesky_logo.png" id = "bluesky-logo"/>Bluesky Custom Feed Generator</div>
-        </div>
-        <div id = "bottom-rectangle">
-            {% for post in posts %}
-              <div class = "skeet-card">
-                <div class = "username">
-                  rachel <span class="handle"><a href = "https://bsky.app/" target = "_blank">@{{post.handle}}</a></span><span class = "handle"> • 7h</span>
-                </div>
-                <div class = "content">
-                  {{post.text_content}}
-                </div>
-                <div class = "status">
-                  <span class="status-chunk"><img src="../static/images/comment_icon.png" class="status-icon"/><span>{{post.reply_count}}</span></span><span class="filler"></span>
-                  <span class="status-chunk"><img src="../static/images/repost_icon.png" class="status-icon"/><span>{{post.repost_count}}</span></span><span class="filler"></span>
-                  <span class="status-chunk"><img src="../static/images/like_icon.png" class="status-icon"/><span>{{post.like_count}}</span></span><span class="filler"></span>
-                  <span class="status-chunk"><img src="../static/images/hamburger_icon.png" class="status-icon"/></span>
-                </div>
-              </div>
-            {% endfor %}
-
             <div class="modal-overlay" id="login-modal">
+              <div class="modal-content">
+                <button class="modal-close" id = "close-login-button">x</button>
+                  <div class="modal-title">Bluesky Custom Feed Generator</div>
+                  <p>If you have a Bluesky account, enter your login information. Or you can just use the demo credentials.</p>
+                  <form method="POST">
+                    <label for="username">Username:</label><br>
+                    <input type="text" id="username" class="input-field" name="username" value="demo-bluesky-acc.bsky.social"><br>
+                    <label for="password">Password:</label><br>
+                    <input type="text" id="password" class="input-field" name="password" value="Bluesky#1!">
+                    <div>
+                      <button class="button" id = "press-button" type="submit">Login</button>
+                    </div>
+                  </form>
+              </div>
+            </div>
+
+            <div class="modal-overlay" id="welcome-modal">
               <div class="modal-content">
                 <button class="modal-close" id = "close-modal-button">x</button>
                   <div class="modal-title">Bluesky Custom Feed Generator</div>
@@ -41,9 +36,6 @@
                   <button class="button" id = "submit-button">Continue</button>
               </div>
             </div>
-            
-        </div>
-    </div> 
     </main>
     <script src="../static/js/index.js"></script>
   </body>
