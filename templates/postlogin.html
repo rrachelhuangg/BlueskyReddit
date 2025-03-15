@@ -19,7 +19,7 @@
             {% for post in posts %}
               <div class = "skeet-card">
                 <div class = "username">
-                  rachel <span class="handle"><a href = "https://bsky.app/" target = "_blank">@{{post.handle}}</a></span><span class = "handle"> • 7h</span>
+                  {{post.name}} <span class="handle"><a href = "https://bsky.app/" target = "_blank">@{{post.handle}}</a></span><span class = "handle"> • 7h</span>
                 </div>
                 <div class = "content">
                   {{post.text_content}}
@@ -51,7 +51,7 @@
                         <div>
                             <button class="button" id = "apply-changes-button" type="submit">Apply Changes</button>
                         </div>
-                    </form>
+                    </form> 
                 </div>
             </div>
 
