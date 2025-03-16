@@ -1,4 +1,6 @@
 import requests
+import json
+import os
 
 from flask import Flask, request, render_template, session
 from flask_cors import CORS
@@ -7,6 +9,42 @@ from methods import get_refresh_token, get_access_token
 app = Flask(__name__)
 app.secret_key="SECRETKEY"
 CORS(app)
+
+def append_skeet_storage(file_name, handle, data):
+    temp_file_path = os.path.join("/tmp", file_name)
+    try:
+        with open(temp_file_path, "r") as file:
+            file_data = json.load(file)
+    except: 
+        file_data = {}
+    file_data[handle] = data
+    with open(temp_file_path, "w") as file:
+        json.dump(file_data, file, indent = 4)
+
+def check_duplicate(file_name, handle):
+    temp_file_path = os.path.join("/tmp", file_name)
+    try:
+        with open(temp_file_path, "r") as file:
+            file_data = json.load(file)
+            for h in file_data:
+                if handle == h:
+                    return True
+        return False
+    except:
+        return False
+
+def load_posts(file_name):
+    posts = []
+    temp_file_path = os.path.join("/tmp", file_name)
+    try:
+        with open(temp_file_path, "r") as file:
+            file_data = json.load(file)
+            for handle in file_data:
+                for post in file_data[handle]:
+                    posts += [post]
+    except:
+        return []
+    return posts
 
 @app.route("/")
 def home():
@@ -61,7 +99,10 @@ def access_login_info():
                     post['repost_count'] = response.json()['feed'][i]['post']['repostCount']
                     post['like_count'] = response.json()['feed'][i]['post']['likeCount']
                     posts += [post]
-            return render_template("postlogin.html", posts=posts)
+            if not check_duplicate("skeets.json", handle):
+                append_skeet_storage("skeets.json", handle, posts)
+        posts = load_posts("skeets.json")
+        return render_template("postlogin.html", posts=posts)
     else:
         return render_template("postlogin.html")
 
