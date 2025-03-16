@@ -1,49 +1,31 @@
 import requests
 import json
 import os
+from upstash_redis import Redis
 
 from flask import Flask, request, render_template, session
 from flask_cors import CORS
 from methods import get_refresh_token, get_access_token
 
+redis_client = Redis(url="https://caring-jaguar-31380.upstash.io", token="AXqUAAIjcDEwMTcwODliMGNjMDc0ZTgwOWIzMDhlOTExMTEwM2MzZnAxMA")
+
 app = Flask(__name__)
 app.secret_key="SECRETKEY"
 CORS(app)
 
-def append_skeet_storage(file_name, handle, data):
-    temp_file_path = os.path.join("/tmp", file_name)
-    try:
-        with open(temp_file_path, "r") as file:
-            file_data = json.load(file)
-    except: 
-        file_data = {}
-    file_data[handle] = data
-    with open(temp_file_path, "w") as file:
-        json.dump(file_data, file, indent = 4)
+def append_skeet_storage(handle, data):
+    data_dump = json.dumps(data)
+    redis_client.set(handle, data_dump)
 
-def check_duplicate(file_name, handle):
-    temp_file_path = os.path.join("/tmp", file_name)
-    try:
-        with open(temp_file_path, "r") as file:
-            file_data = json.load(file)
-            for h in file_data:
-                if handle == h:
-                    return True
-        return False
-    except:
-        return False
+def check_duplicate(handle):
+    return redis_client.exists(handle)
 
-def load_posts(file_name):
+def load_posts():
     posts = []
-    temp_file_path = os.path.join("/tmp", file_name)
-    try:
-        with open(temp_file_path, "r") as file:
-            file_data = json.load(file)
-            for handle in file_data:
-                for post in file_data[handle]:
-                    posts += [post]
-    except:
-        return []
+    for handle in redis_client.keys("*"):
+        posts_data = redis_client.get(handle)
+        if posts_data:
+            posts += json.loads(posts_data)
     return posts
 
 @app.route("/")
@@ -99,9 +81,9 @@ def access_login_info():
                     post['repost_count'] = response.json()['feed'][i]['post']['repostCount']
                     post['like_count'] = response.json()['feed'][i]['post']['likeCount']
                     posts += [post]
-            if not check_duplicate("skeets.json", handle):
-                append_skeet_storage("skeets.json", handle, posts)
-        posts = load_posts("skeets.json")
+            if not check_duplicate(handle):
+                append_skeet_storage(handle, posts)
+        posts = load_posts()
         return render_template("postlogin.html", posts=posts)
     else:
         return render_template("postlogin.html")
