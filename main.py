@@ -35,6 +35,7 @@ def home():
 @app.route("/", methods=["POST"])
 def access_login_info():
     session['added_accounts'] = []
+    redis_client.flushdb()
     if 'username' in request.form and 'password' in request.form:
         username = request.form['username']
         password = request.form['password']
