@@ -180,6 +180,29 @@ a{
     margin-bottom:3%;
 }
 
+.lego-image-display{
+    display: flex;
+    justify-content: center;
+}
+
+@keyframes brick-animation{
+    0%{
+        transform: scale(1);
+    }
+    50%{
+        transform: scale(1.2);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+
+.lego-image{
+    width:17.5vw;
+    margin-top:7.5vw;
+    animation: brick-animation 7.5s ease-in-out infinite;
+}
+
 /*mobile view*/
 @media(max-width:480px){
     #card{

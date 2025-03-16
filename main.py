@@ -41,24 +41,16 @@ def access_login_info():
         refresh_token = get_refresh_token(username, password)
         access_token = get_access_token(refresh_token)
         session['access_token'] = access_token
-        handle = "demo-bluesky-acc.bsky.social"
-        url = f'https://bsky.social/xrpc/app.bsky.feed.getAuthorFeed?actor={handle}&limit={100}'
-        headers = {
-            'Authorization':f"Bearer {access_token}",
-            'Content-Type':'application/json'
-        }
-        response = requests.get(url, headers=headers, timeout=15)
         posts = []
-        for i in range(len(response.json()['feed'])):
-            post = {}
-            post['name'] = response.json()['feed'][i]['post']['author']['displayName']
-            post['handle'] = response.json()['feed'][i]['post']['author']['handle']
-            post['text_content'] = response.json()['feed'][i]['post']['record']['text']
-            post['reply_count'] = response.json()['feed'][i]['post']['replyCount']
-            post['repost_count'] = response.json()['feed'][i]['post']['repostCount']
-            post['like_count'] = response.json()['feed'][i]['post']['likeCount']
-            posts += [post]
-        return render_template("postlogin.html", posts=posts)
+        post = {}
+        post['name'] = "Demo Bluesky Reddit"
+        post['handle'] = "welcome.bsky.social"
+        post['text_content'] = "Add a feed component with the add component button above!"
+        post['reply_count'] = 2
+        post['repost_count'] = 10
+        post['like_count'] = 69
+        posts += [post]
+        return render_template("inbetween.html",posts=posts)
     elif 'account' in request.form:
         access_token = session['access_token']
         handle = request.form['account']

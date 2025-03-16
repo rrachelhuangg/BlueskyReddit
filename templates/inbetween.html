@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Bluesky Reddit</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="icon" href="../static/bluesky_logo.png" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <div id = "card">
+        <div id = "top-rectangle">
+            <div id = "name"><img src = "../static/images/bluesky_logo.png" id = "bluesky-logo"/>Bluesky Custom Feed Generator<button class = "button" id = "add-button">Add Component + </span></div>
+        </div>
+        <div id = "bottom-rectangle">
+
+            {% for post in posts %}
+              <div class = "skeet-card">
+                <div class = "username">
+                  {{post.name}} <span class="handle"><a href = "https://bsky.app/" target = "_blank">@{{post.handle}}</a></span><span class = "handle"> • 7h</span>
+                </div>
+                <div class = "content">
+                  {{post.text_content}}
+                </div>
+                <div class = "status">
+                  <span class="status-chunk"><img src="../static/images/comment_icon.png" class="status-icon"/><span>{{post.reply_count}}</span></span><span class="filler"></span>
+                  <span class="status-chunk"><img src="../static/images/repost_icon.png" class="status-icon"/><span>{{post.repost_count}}</span></span><span class="filler"></span>
+                  <span class="status-chunk"><img src="../static/images/like_icon.png" class="status-icon"/><span>{{post.like_count}}</span></span><span class="filler"></span>
+                  <span class="status-chunk"><img src="../static/images/hamburger_icon.png" class="status-icon"/></span>
+                </div>
+              </div>
+            {% endfor %}
+
+            <div class="lego-image-display">
+                <img src="../static/images/blue_legos.png" class="lego-image"/>
+            </div>
+
+            <div class="modal-overlay add-component-modal-overlay" id="add-component-modal">
+                <div class="modal-content">
+                  <button class="modal-close" id = "close-modal-button">x</button>
+                    <div class="modal-title add-component-modal-title">Add Components</div>
+                    <form method="POST">
+                        <label for="username">Account:</label><br>
+                        <input type="text" id="account" class="input-field" name="account"><button class="add-component-button" id="add-account-button">Add + </button><br>
+                        <label for="password">Hashtag:</label><br>
+                        <input type="text" id="hashtag" class="input-field" name="hashtag"><button class="add-component-button" id="add-hashtag-button">Add + </button><br>
+                        <label for="password">Keyword:</label><br>
+                        <input type="text" id="keyword" class="input-field" name="keyword"><button class="add-component-button" id="add-keyword-button">Add + </button><br>
+                        <label for="photo-attachment">Photo Attachment:</label>
+                        <input type="checkbox" id="photo-attachment" name="photo-attachment">
+                        <label for="video-attachment">Video Attachment:</label>
+                        <input type="checkbox" id="video-attachment" name="video-attachment">
+                        <div>
+                            <button class="button" id = "apply-changes-button" type="submit">Apply Changes</button>
+                        </div>
+                    </form> 
+                </div>
+            </div>
+
+        </div>
+    </div> 
+    </main>
+    <script src="../static/js/postlogin.js"></script>
+  </body>
+</html>
