@@ -35,8 +35,8 @@ def home():
 @app.route("/", methods=["POST"])
 def access_login_info():
     session['added_accounts'] = []
-    redis_client.flushdb()
     if 'username' in request.form and 'password' in request.form:
+        redis_client.flushdb()
         username = request.form['username']
         password = request.form['password']
         refresh_token = get_refresh_token(username, password)
