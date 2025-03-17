@@ -40,6 +40,14 @@
                     <form method="POST">
                         <label for="username">Account:</label><br>
                         <input type="text" id="account" class="input-field" name="account"><button class="add-component-button" id="add-account-button">Add + </button><br>
+                        {% for handle in handles %}
+                            <div class = "added-components-container">
+                              <div class="added-component-tag">
+                              {{handle}}
+                              <span class="remove-component-tag">x</span>
+                              </div>
+                            </div>
+                        {% endfor %}
                         <label for="password">Hashtag:</label><br>
                         <input type="text" id="hashtag" class="input-field" name="hashtag"><button class="add-component-button" id="add-hashtag-button">Add + </button><br>
                         <label for="password">Keyword:</label><br>

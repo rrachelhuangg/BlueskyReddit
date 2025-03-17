@@ -203,6 +203,19 @@ a{
     animation: brick-animation 7.5s ease-in-out infinite;
 }
 
+.added-components-container{
+    display: flex;
+    vertical-align: middle;
+}
+
+.added-component-tag{
+    background-color: rgb(228, 228, 228);
+    border-radius:5%;
+    font-weight:bold;
+    font-size:smaller;
+    padding:0.5% 1% 0.5% 1%;
+}
+
 /*mobile view*/
 @media(max-width:480px){
     #card{

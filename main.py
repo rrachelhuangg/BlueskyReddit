@@ -77,7 +77,7 @@ def access_login_info():
             if not check_duplicate(handle):
                 append_skeet_storage(handle, posts)
         posts = load_posts()
-        return render_template("postlogin.html", posts=posts)
+        return render_template("postlogin.html", posts=posts, handles=session['added_accounts'])
     else:
         return render_template("postlogin.html")
 
