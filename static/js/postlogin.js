@@ -16,13 +16,6 @@ document.addEventListener("DOMContentLoaded", function(){
     addComponentButton.addEventListener('click', openAddComponentModal);
     closeComponentModal.addEventListener('click', closeModal);
 
-    function addComponentToArray(accountHandle){
-        return new Promise((resolve)=>{
-            addedComponents.push(accountHandle);
-            resolve(addedComponents);
-        })
-    }
-
     const addAccountButton = document.getElementById('add-account-button');
     const componentTagsContainer = document.getElementById('added-components-container');
     const applyChangesButton = document.getElementById('apply-changes-button');
@@ -30,13 +23,12 @@ document.addEventListener("DOMContentLoaded", function(){
     addAccountButton.addEventListener('click', function(event){
         event.preventDefault();
         const accountHandle = accountInput.value;
-        addComponentToArray(accountHandle).then((updatedArray)=>{
-            let componentTag = document.createElement('div');
-            componentTag.classList.add('added-component-tag');
-            componentTag.innerHTML = `${accountHandle} <span class="remove-component-tag" data-handle="${accountHandle}">x</span>`;
-            componentTagsContainer.appendChild(componentTag);
-            accountInput.value='';
-        })
+        addedComponents.push(accountHandle);
+        let componentTag = document.createElement('div');
+        componentTag.classList.add('added-component-tag');
+        componentTag.innerHTML = `${accountHandle} <span class="remove-component-tag" data-handle="${accountHandle}">x</span>`;
+        componentTagsContainer.appendChild(componentTag);
+        accountInput.value='';
     });
 
     componentTagsContainer.addEventListener('click', function(event){
@@ -60,7 +52,6 @@ document.addEventListener("DOMContentLoaded", function(){
                 body: JSON.stringify({handles:addedComponents})
             });
             posts = await response.json();
-            console.log("POSTS JS: ", posts);
             renderPosts(posts);
         } catch (error){
             console.log("Error fetching posts: ", error);
@@ -69,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
     function renderPosts(posts){
         postsContainer.innerHTML='';
-        console.log("POSTS: ", posts);
         posts.forEach(post=>{
             const postElement = document.createElement('div');
             postElement.classList.add('skeet-card');

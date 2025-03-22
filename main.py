@@ -13,6 +13,7 @@ app = Flask(__name__)
 app.secret_key="SECRETKEY"
 CORS(app)
 
+#should move these to methods eventually
 def append_skeet_storage(handle, data):
     data_dump = json.dumps(data)
     redis_client.set(handle, data_dump)
@@ -44,16 +45,7 @@ def access_login_info():
         refresh_token = get_refresh_token(username, password)
         access_token = get_access_token(refresh_token)
         session['access_token'] = access_token
-        posts = []
-        post = {}
-        post['name'] = "Demo Bluesky Reddit"
-        post['handle'] = "welcome.bsky.social"
-        post['text_content'] = "Add a feed component with the add component button above!"
-        post['reply_count'] = 2
-        post['repost_count'] = 10
-        post['like_count'] = 69
-        posts += [post]
-        return render_template("postlogin.html",posts=posts)
+        return render_template("postlogin.html")
 
 @app.route("/get_posts", methods=["POST"])
 def get_posts():
@@ -64,11 +56,10 @@ def get_posts():
 
 def fetch_data(handles):
     access_token = session['access_token']
-    for handle in handles:
-        session['added_accounts'] += [handle]
     posts = []
-    for handle in session['added_accounts']:
-        print("HANDLE: ", handle)
+    for handle in handles:
+        if handle not in session['added_accounts']:
+            session['added_accounts'] += [handle]
         url = f'https://bsky.social/xrpc/app.bsky.feed.getAuthorFeed?actor={handle}&limit={100}'
         headers = {
             'Authorization':f"Bearer {access_token}",
