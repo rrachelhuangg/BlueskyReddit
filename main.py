@@ -3,7 +3,7 @@ import json
 import os
 from upstash_redis import Redis
 
-from flask import Flask, request, render_template, session
+from flask import Flask, request, render_template, session, jsonify
 from flask_cors import CORS
 from methods import get_refresh_token, get_access_token
 
@@ -28,14 +28,51 @@ def load_posts():
             posts += json.loads(posts_data)
     return posts
 
+
 @app.route("/")
 def home():
     return render_template("index.html")
 
+@app.route("/get_posts", methods=["POST"])
+def get_posts():
+    data = request.get_json()
+    handles = data['handles']
+    posts = fetch_data(handles)
+    return posts
+
+def fetch_data(handles):
+    access_token = "eyJ0eXAiOiJhdCtqd3QiLCJhbGciOiJFUzI1NksifQ.eyJzY29wZSI6ImNvbS5hdHByb3RvLmFjY2VzcyIsInN1YiI6ImRpZDpwbGM6a3h3eXh6MnN1YjRvczUyemJlM3ZocTRjIiwiaWF0IjoxNzQyNjQ4MjM2LCJleHAiOjE3NDI2NTU0MzYsImF1ZCI6ImRpZDp3ZWI6cGFudXMudXMtd2VzdC5ob3N0LmJza3kubmV0d29yayJ9.7MFtoDq93YhXFR_FYCPWJsaH1zKdm7Rq2SE9H-9CdS8Ceuc06KCxqAycBYL7Lmr8n7vD0en_GWI4xaUzfCEdZA"
+    for handle in handles:
+        session['added_accounts'] += [handle]
+    posts = []
+    for handle in session['added_accounts']:
+        url = f'https://bsky.social/xrpc/app.bsky.feed.getAuthorFeed?actor={handle}&limit={100}'
+        headers = {
+            'Authorization':f"Bearer {access_token}",
+            'Content-Type':'application/json'
+        }
+        response = requests.get(url, headers=headers, timeout=15)
+        posts = []
+        for i in range(len(response.json()['feed'])):
+            post = {}
+            if response.json()['feed'][i]['post']['author']['handle'] == handle: #filtering out random posts??
+                post['name'] = response.json()['feed'][i]['post']['author']['displayName']
+                post['handle'] = response.json()['feed'][i]['post']['author']['handle']
+                post['text_content'] = response.json()['feed'][i]['post']['record']['text']
+                post['reply_count'] = response.json()['feed'][i]['post']['replyCount']
+                post['repost_count'] = response.json()['feed'][i]['post']['repostCount']
+                post['like_count'] = response.json()['feed'][i]['post']['likeCount']
+                posts += [post]
+        if not check_duplicate(handle):
+            append_skeet_storage(handle, posts)
+        return posts
+
 @app.route("/", methods=["POST"])
 def access_login_info():
     session['added_accounts'] = []
+    redis_client.flushdb()
     if 'username' in request.form and 'password' in request.form:
+        print("HERE")
         redis_client.flushdb()
         username = request.form['username']
         password = request.form['password']
@@ -51,35 +88,7 @@ def access_login_info():
         post['repost_count'] = 10
         post['like_count'] = 69
         posts += [post]
-        return render_template("inbetween.html",posts=posts)
-    elif 'account' in request.form:
-        access_token = session['access_token']
-        handle = request.form['account']
-        session['added_accounts'] += [handle] #should implement some sort of a cache to speed things up!
-        for handle in session['added_accounts']:
-            url = f'https://bsky.social/xrpc/app.bsky.feed.getAuthorFeed?actor={handle}&limit={100}'
-            headers = {
-                'Authorization':f"Bearer {access_token}",
-                'Content-Type':'application/json'
-            }
-            response = requests.get(url, headers=headers, timeout=15)
-            posts = []
-            for i in range(len(response.json()['feed'])):
-                post = {}
-                if response.json()['feed'][i]['post']['author']['handle'] == handle: #filtering out random posts??
-                    post['name'] = response.json()['feed'][i]['post']['author']['displayName']
-                    post['handle'] = response.json()['feed'][i]['post']['author']['handle']
-                    post['text_content'] = response.json()['feed'][i]['post']['record']['text']
-                    post['reply_count'] = response.json()['feed'][i]['post']['replyCount']
-                    post['repost_count'] = response.json()['feed'][i]['post']['repostCount']
-                    post['like_count'] = response.json()['feed'][i]['post']['likeCount']
-                    posts += [post]
-            if not check_duplicate(handle):
-                append_skeet_storage(handle, posts)
-        posts = load_posts()
-        return render_template("postlogin.html", posts=posts, handles=session['added_accounts'])
-    else:
-        return render_template("postlogin.html")
+        return render_template("postlogin.html",posts=posts)
 
 if __name__ == "__main__": #can remove after final version is deployed (only for testing rn)
     app.run(debug=True)

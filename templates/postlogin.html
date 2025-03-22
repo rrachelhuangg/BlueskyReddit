@@ -15,42 +15,22 @@
             <div id = "name"><img src = "../static/images/bluesky_logo.png" id = "bluesky-logo"/>Bluesky Custom Feed Generator<button class = "button" id = "add-button">Add Component + </span></div>
         </div>
         <div id = "bottom-rectangle">
+          <div id="posts-container"></div>
 
-            {% for post in posts %}
-              <div class = "skeet-card">
-                <div class = "username">
-                  {{post.name}} <span class="handle"><a href = "https://bsky.app/" target = "_blank">@{{post.handle}}</a></span><span class = "handle"> • 7h</span>
-                </div>
-                <div class = "content">
-                  {{post.text_content}}
-                </div>
-                <div class = "status">
-                  <span class="status-chunk"><img src="../static/images/comment_icon.png" class="status-icon"/><span>{{post.reply_count}}</span></span><span class="filler"></span>
-                  <span class="status-chunk"><img src="../static/images/repost_icon.png" class="status-icon"/><span>{{post.repost_count}}</span></span><span class="filler"></span>
-                  <span class="status-chunk"><img src="../static/images/like_icon.png" class="status-icon"/><span>{{post.like_count}}</span></span><span class="filler"></span>
-                  <span class="status-chunk"><img src="../static/images/hamburger_icon.png" class="status-icon"/></span>
-                </div>
-              </div>
-            {% endfor %}
+            <!-- add expanding bricks animation back (should be quick, already have the css for it) -->
 
             <div class="modal-overlay add-component-modal-overlay" id="add-component-modal">
                 <div class="modal-content">
                   <button class="modal-close" id = "close-modal-button">x</button>
                     <div class="modal-title add-component-modal-title">Add Components</div>
                     <form method="POST">
-                        <label for="username">Account:</label><br>
+                        <label for="account">Account:</label><br>
                         <input type="text" id="account" class="input-field" name="account"><button class="add-component-button" id="add-account-button">Add + </button><br>
-                        {% for handle in handles %}
-                            <div class = "added-components-container">
-                              <div class="added-component-tag">
-                              {{handle}}
-                              <span class="remove-component-tag">x</span>
-                              </div>
-                            </div>
-                        {% endfor %}
-                        <label for="password">Hashtag:</label><br>
+                        <div id = "added-components-container">
+                        </div>
+                        <label for="hashtag">Hashtag:</label><br>
                         <input type="text" id="hashtag" class="input-field" name="hashtag"><button class="add-component-button" id="add-hashtag-button">Add + </button><br>
-                        <label for="password">Keyword:</label><br>
+                        <label for="keyword">Keyword:</label><br>
                         <input type="text" id="keyword" class="input-field" name="keyword"><button class="add-component-button" id="add-keyword-button">Add + </button><br>
                         <label for="photo-attachment">Photo Attachment:</label>
                         <input type="checkbox" id="photo-attachment" name="photo-attachment">

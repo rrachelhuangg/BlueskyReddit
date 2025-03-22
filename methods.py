@@ -17,3 +17,5 @@ def get_refresh_token(username: str, password: str) -> str:
     response = requests.post(url, json=data, timeout = 30)
     response.raise_for_status()
     return response.json().get('refreshJwt')
+
+# print(get_access_token(get_refresh_token("demo-bluesky-acc.bsky.social", "Bluesky#1!")))
